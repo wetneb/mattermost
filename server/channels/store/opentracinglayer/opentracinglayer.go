@@ -6601,7 +6601,7 @@ func (s *OpenTracingLayerPostStore) GetOldestEntityCreationTime() (int64, error)
 	return result, err
 }
 
-func (s *OpenTracingLayerPostStore) GetParentsForExportAfter(limit int, afterID string, includeArchivedChannels bool, teamID *string) ([]*model.PostForExport, error) {
+func (s *OpenTracingLayerPostStore) GetParentsForExportAfter(limit int, afterID string, includeArchivedChannels bool, teamID string) ([]*model.PostForExport, error) {
 	origCtx := s.Root.Store.Context()
 	span, newCtx := tracing.StartSpanWithParentByContext(s.Root.Store.Context(), "PostStore.GetParentsForExportAfter")
 	s.Root.Store.SetContext(newCtx)

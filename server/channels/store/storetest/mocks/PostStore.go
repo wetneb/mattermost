@@ -434,7 +434,7 @@ func (_m *PostStore) GetOldestEntityCreationTime() (int64, error) {
 }
 
 // GetParentsForExportAfter provides a mock function with given fields: limit, afterID, includeArchivedChannels, teamID
-func (_m *PostStore) GetParentsForExportAfter(limit int, afterID string, includeArchivedChannels bool, teamID *string) ([]*model.PostForExport, error) {
+func (_m *PostStore) GetParentsForExportAfter(limit int, afterID string, includeArchivedChannels bool, teamID string) ([]*model.PostForExport, error) {
 	ret := _m.Called(limit, afterID, includeArchivedChannels, teamID)
 
 	if len(ret) == 0 {
@@ -443,10 +443,10 @@ func (_m *PostStore) GetParentsForExportAfter(limit int, afterID string, include
 
 	var r0 []*model.PostForExport
 	var r1 error
-	if rf, ok := ret.Get(0).(func(int, string, bool, *string) ([]*model.PostForExport, error)); ok {
+	if rf, ok := ret.Get(0).(func(int, string, bool, string) ([]*model.PostForExport, error)); ok {
 		return rf(limit, afterID, includeArchivedChannels, teamID)
 	}
-	if rf, ok := ret.Get(0).(func(int, string, bool, *string) []*model.PostForExport); ok {
+	if rf, ok := ret.Get(0).(func(int, string, bool, string) []*model.PostForExport); ok {
 		r0 = rf(limit, afterID, includeArchivedChannels, teamID)
 	} else {
 		if ret.Get(0) != nil {
@@ -454,7 +454,7 @@ func (_m *PostStore) GetParentsForExportAfter(limit int, afterID string, include
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(int, string, bool, *string) error); ok {
+	if rf, ok := ret.Get(1).(func(int, string, bool, string) error); ok {
 		r1 = rf(limit, afterID, includeArchivedChannels, teamID)
 	} else {
 		r1 = ret.Error(1)

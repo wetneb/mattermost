@@ -146,7 +146,7 @@ func (a *App) BulkExport(ctx request.CTX, writer io.Writer, outPath string, job 
 
 	var teamNames map[string]bool
 	var err *model.AppError
-	var teamId *string
+	teamId := ""
 	if opts.TeamName == nil {
 		ctx.Logger().Info("Bulk export: exporting teams")
 		teamNames, err = a.exportAllTeams(ctx, job, writer)
@@ -156,8 +156,8 @@ func (a *App) BulkExport(ctx request.CTX, writer io.Writer, outPath string, job 
 		if err != nil {
 			return model.NewAppError("BulkExport", "app.team.get.app_error", nil, "team="+*opts.TeamName, http.StatusInternalServerError).Wrap(err)
 		}
-		teamId = &team.Id
-		teamNames, err = a.exportSingleTeam(ctx, job, writer, *teamId)
+		teamId = team.Id
+		teamNames, err = a.exportSingleTeam(ctx, job, writer, teamId)
 	}
 	if err != nil {
 		return err
@@ -194,7 +194,7 @@ func (a *App) BulkExport(ctx request.CTX, writer io.Writer, outPath string, job 
 	}
 
 	var directAttachments []imports.AttachmentImportData
-	if teamId == nil {
+	if teamId == "" {
 		ctx.Logger().Info("Bulk export: exporting direct channels")
 		if err = a.exportAllDirectChannels(ctx, job, writer, opts.IncludeArchivedChannels); err != nil {
 			return err
@@ -213,7 +213,7 @@ func (a *App) BulkExport(ctx request.CTX, writer io.Writer, outPath string, job 
 			return err
 		}
 
-		if teamId == nil {
+		if teamId == "" {
 			ctx.Logger().Info("Bulk export: exporting direct file attachments")
 			if err = a.exportAttachments(ctx, directAttachments, outPath, zipWr); err != nil {
 				return err
@@ -724,7 +724,7 @@ func (a *App) buildUserNotifyProps(notifyProps model.StringMap) *imports.UserNot
 	}
 }
 
-func (a *App) exportAllPosts(ctx request.CTX, job *model.Job, writer io.Writer, withAttachments bool, includeArchivedChannels bool, teamId *string) ([]imports.AttachmentImportData, *model.AppError) {
+func (a *App) exportAllPosts(ctx request.CTX, job *model.Job, writer io.Writer, withAttachments bool, includeArchivedChannels bool, teamId string) ([]imports.AttachmentImportData, *model.AppError) {
 	var attachments []imports.AttachmentImportData
 	afterId := strings.Repeat("0", 26)
 	var postProcessCount uint64
